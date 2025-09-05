@@ -643,4 +643,39 @@
         .catch((err) => console.error("메뉴 로드 실패:", err));
     });
   </script>
+  <script>
+    // 메뉴 프래그먼트 로더 (상대경로 안전)
+    document.addEventListener("DOMContentLoaded", async () => {
+      const target = document.querySelector(".upmenu");
+      if (!target) return;
+
+      // ① 현재 페이지 기준 상대경로 사용
+      const url = new URL("./menu.html", window.location.href);
+
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const html = await res.text();
+        target.innerHTML = html;
+
+        // (선택) menu.html 내부에 <script>가 있다면 실행되도록 처리
+        target.querySelectorAll("script").forEach((old) => {
+          const s = document.createElement("script");
+          if (old.src) {
+            s.src = old.src;
+          } else {
+            s.textContent = old.textContent;
+          }
+          document.body.appendChild(s);
+          old.remove();
+        });
+      } catch (err) {
+        console.error("메뉴 로드 실패:", err);
+        target.innerHTML = `
+        <div style="padding:8px 12px; background:#fee; color:#900; border-radius:8px;">
+          메뉴를 불러오지 못했습니다. (<code>${url.pathname}</code>)
+        </div>`;
+      }
+    });
+  </script>
 </html>
