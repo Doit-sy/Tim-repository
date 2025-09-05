@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>공식홈페이지 (Uscr) - 샘플</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="main">
+      <div class="upmenu"></div>
+      <section id="home" class="content">
+        <div id="banner" class="banner">
+          <h2>함께 만드는 성장</h2>
+          <p>
+            우리는 혼자가 아니라 피드백을 주고받는 과정 속에서 성장한다고
+            믿습니다.
+          </p>
+        </div>
+        <div class="logos">
+          <p>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/4/44/Spring_Framework_Logo_2018.svg"
+              style="width: 150px"
+            />
+          </p>
+          <p>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg"
+              style="width: 70px"
+            />
+          </p>
+          <p>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/8/87/Sql_data_base_with_logo.png"
+              style="width: 90px"
+            />
+          </p>
+          <p>
+            <img
+              src="https://www.vectorlogo.zone/logos/nodejs/nodejs-ar21.svg"
+              style="width: 150px"
+            />
+          </p>
+          <p>
+            <img
+              src="https://www.mysql.com/common/logos/logo-mysql-170x115.png"
+              style="width: 140px; margin-top: -40px"
+            />
+          </p>
+          <p>
+            <img
+              src="https://www.logo.wine/a/logo/Java_(programming_language)/Java_(programming_language)-Logo.wine.svg"
+              style="width: 230px; margin-top: -40px; margin-left: -60px"
+            />
+          </p>
+          <p>
+            <img
+              src="https://logos-world.net/wp-content/uploads/2021/10/Python-Emblem.png"
+              style="width: 100px; margin-left: -180px"
+            />
+          </p>
+        </div>
+      </section>
+    </div>
+  </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch("/menu.html")
+        .then((res) => res.text())
+        .then((html) => {
+          document.querySelector(".upmenu").innerHTML = html;
+        })
+        .catch((err) => console.error("메뉴 로드 실패:", err));
+    });
+  </script>
+</html>

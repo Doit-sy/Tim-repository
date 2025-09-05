@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    /* ===== 리셋 & 기본 ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ===== 레이아웃 공통 ===== */
+    .container {
+      z-index: 1;
+      position: relative;
+      gap: 12px;
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      height: 80px;
+      padding: 0 16px;
+    }
+    #home {
+      margin: 0 auto;
+      max-width: 1200px;
+    }
+
+    /* ===== 헤더/브랜드 ===== */
+    header {
+      position: relative;
+      z-index: 2;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: #0b7247;
+      font-weight: 800;
+      background: #fff;
+    }
+    .logo h1 {
+      color: #f7fffb;
+      font-size: 18px;
+      margin: 0;
+    }
+
+    /* ===== 네비게이션 ===== */
+    .topnav {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      transition: transform 0.28s ease, height 0.28s ease, padding 0.28s ease;
+    }
+    .menu-wrap {
+      display: flex;
+      justify-content: center;
+    }
+    .menu {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      padding: 10px 0;
+      font-weight: 500;
+    }
+    .menu > li {
+      list-style: none;
+      position: relative;
+    }
+    .menu-link {
+      color: #f7fffb;
+      font-size: 1.2rem;
+      display: flex;
+      min-width: 110px;
+      height: 44px;
+      padding: 0 14px;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease, box-shadow 0.15s ease,
+        border-color 0.15s ease;
+      will-change: transform;
+    }
+    .menu-link:hover {
+      font-weight: bold;
+      transform: translateY(-1px);
+    }
+
+    /* 항목 밑줄 애니메이션 */
+    .has-dd {
+      padding: 10px 0;
+    }
+    .has-dd::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: yellow;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .has-dd:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* ===== 드롭다운 ===== */
+    .dropdown {
+      z-index: 5;
+      width: max-content;
+      position: absolute;
+      left: 50%;
+      top: 100%;
+      transform: translate(-50%, -6px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      transition: opacity 0.18s ease, transform 0.22s ease;
+
+      /* 어두운 배경 위에서 가독성 */
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .dropdown > li {
+      position: relative;
+      width: 100%;
+      display: flex;
+    }
+    .dropdown > li > a {
+      word-wrap: break-word;
+      flex: 1;
+      padding: 15px 25px;
+      width: 100%;
+      color: #f7fffb;
+    }
+    .dropdown > li > a:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* 드롭다운 유지 브리지 + 열림 상태 */
+    .menu > li.has-dd {
+      position: relative;
+      --dd-gap: 10px;
+    }
+    .menu > li.has-dd::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      height: var(--dd-gap);
+    }
+    .menu > li.has-dd .dropdown {
+      top: calc(100% + var(--dd-gap));
+      margin-top: 0 !important;
+    }
+    .menu > li:hover .dropdown,
+    .menu > li:focus-within .dropdown,
+    .menu > li .dropdown:hover {
+      transform: translate(-50%, 0);
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .menu > li:hover .menu-link {
+      transform: translateY(-1px);
+      font-weight: bold;
+    }
+
+    /* ===== 보조 텍스트 ===== */
+    .muted {
+      opacity: 0.8;
+    }
+
+    /* ===== 접근성: 모션 최소화 ===== */
+    @media (prefers-reduced-motion: reduce) {
+      .topnav,
+      .dropdown {
+        transition: none;
+      }
+    }
+  </style>
+
+  <body>
+    <header id="header">
+      <div class="container" id="home">
+        <div class="logo">
+          <div class="logo-badge">US</div>
+          <h1><a href="/index.html">공식홈페이지</a></h1>
+        </div>
+        <div>
+          <nav id="topNav" class="topnav" aria-label="주 메뉴">
+            <div class="menu-wrap">
+              <ul class="menu">
+                <!-- 교육 과정 -->
+                <li class="has-dd">
+                  <a href="/courses/index.html" class="menu-link">교육 과정</a>
+                  <ul class="dropdown">
+                    <li>
+                      <a class="drop-link" href="#course-list">과정 목록</a>
+                    </li>
+                    <li>
+                      <a class="drop-link" href="#course-detail">과정 상세</a>
+                    </li>
+                    <li>
+                      <a class="drop-link" href="#course-detail">강사 정보</a>
+                    </li>
+                    <li>
+                      <a class="drop-link" href="#course-detail">커리큘럼</a>
+                    </li>
+                    <li>
+                      <a class="drop-link" href="#course-detail">신청</a>
+                    </li>
+                  </ul>
+                </li>
+
+                <!-- 강사 소개 -->
+                <li class="has-dd">
+                  <a href="/instructors/index.html" class="menu-link"
+                    >강사 소개</a
+                  >
+                  <ul class="dropdown">
+                    <li>
+                      <a class="drop-link" href="#instructors">강사 프로필</a>
+                    </li>
+                    <li>
+                      <a class="drop-link" href="#instructors">강의 이력</a>
+                    </li>
+                  </ul>
+                </li>
+
+                <!-- 커뮤니티 -->
+                <li class="has-dd">
+                  <a href="/community/index.html" class="menu-link">커뮤니티</a>
+                  <ul class="dropdown wide">
+                    <li>
+                      <a class="drop-link" href="#community">자유게시판</a>
+                    </li>
+                    <li>
+                      <a class="drop-link" href="#community">Q&amp;A</a>
+                    </li>
+                    <li><a class="drop-link" href="#community">자료실</a></li>
+                    <li>
+                      <a class="drop-link" href="#community">공지사항</a>
+                    </li>
+                    <li>
+                      <a class="drop-link" href="#community">문의 게시판</a>
+                    </li>
+                    <li>
+                      <a class="drop-link" href="#community">수강 후기</a>
+                    </li>
+                    <li>
+                      <a class="drop-link" href="#community">강사 후기</a>
+                    </li>
+                    <li>
+                      <a class="drop-link" href="#community"
+                        >프로그램 다운로드</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+
+                <!-- 내 강의실 -->
+                <li class="has-dd">
+                  <ul class="dropdown">
+                    <a class="drop-link" href="#classroom">내 강의</a>
+                    <a class="drop-link" href="#classroom">출석/시험/과제</a>
+                    <a class="drop-link" href="#classroom">내 정보 수정</a>
+                    <a class="drop-link" href="#classroom">결제 내역</a>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="muted">
+          <a href="/classroom/index.html" class="menu-link">내 강의실</a>
+        </div>
+      </div>
+    </header>
+  </body>
+</html>
